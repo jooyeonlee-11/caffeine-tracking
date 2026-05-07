@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>카페인 기록</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --border: #2d3a4d;
+      --text: #e8ecf1;
+      --muted: #8b9aad;
+      --accent: #6eb5ff;
+      --accent-dim: #4a7ab8;
+      --coffee: #c4956a;
+      --other: #7dd3c0;
+      --danger: #f08b8b;
+      --radius: 12px;
+      --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(160deg, var(--bg) 0%, #141c28 100%);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 15px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px 18px 48px;
+    }
+
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin: 0 0 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 22px;
+      padding: 4px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    .tabs button {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .tabs button:hover {
+      color: var(--text);
+    }
+
+    .tabs button.active {
+      background: var(--accent);
+      color: #0a0e14;
+    }
+
+    .panel {
+      display: none;
+    }
+
+    .panel.active {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .card h2 {
+      font-size: 0.95rem;
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .card.coffee h2 { color: var(--coffee); }
+    .card.other h2 { color: var(--other); }
+
+    label {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    input[type="number"],
+    input[type="datetime-local"],
+    textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #121a24;
+      color: var(--text);
+      font: inherit;
+      margin-bottom: 14px;
+    }
+
+    textarea {
+      min-height: 72px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent-dim);
+      box-shadow: 0 0 0 3px rgba(110, 181, 255, 0.15);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 10px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, filter 0.15s;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-save-coffee {
+      background: var(--coffee);
+      color: #1a120c;
+    }
+
+    .btn-save-other {
+      background: var(--other);
+      color: #0a1614;
+    }
+
+    .view-toolbar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .view-toolbar button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .view-toolbar button.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(110, 181, 255, 0.12);
+    }
+
+    .stat-box {
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(110, 181, 255, 0.15), rgba(196, 149, 106, 0.1));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 18px;
+    }
+
+    .stat-box .value {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--accent);
+    }
+
+    .stat-box .unit {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .stat-box .hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 10px;
+      opacity: 0.85;
+    }
+
+    .chart-wrap {
+      position: relative;
+      height: 260px;
+      margin-top: 8px;
+    }
+
+    .empty-msg {
+      text-align: center;
+      color: var(--muted);
+      padding: 32px 16px;
+      font-size: 0.92rem;
+    }
+
+    .log-list {
+      margin-top: 20px;
+    }
+
+    .log-list h3 {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0 0 12px;
+      font-weight: 600;
+    }
+
+    .log-item {
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      margin-bottom: 8px;
+      font-size: 0.88rem;
+    }
+
+    .log-item.coffee { border-left: 3px solid var(--coffee); }
+    .log-item.other { border-left: 3px solid var(--other); }
+
+    .log-item .meta {
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-top: 6px;
+    }
+
+    .log-item .reason {
+      margin-top: 8px;
+      color: var(--text);
+      opacity: 0.95;
+    }
+
+    .log-item button.delete {
+      margin-top: 10px;
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--danger);
+      background: transparent;
+      color: var(--danger);
+      cursor: pointer;
+    }
+
+    /* 위(胃) 동기부여 시각화 */
+    .stomach-viz {
+      margin-bottom: 18px;
+      padding: 18px 16px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+    }
+
+    .stomach-viz h2 {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .stomach-svg-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 168px;
+      filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.35));
+    }
+
+    .stomach-svg {
+      width: 100%;
+      max-width: 200px;
+      height: auto;
+      vertical-align: middle;
+    }
+
+    .stomach-caption {
+      margin: 14px 0 0;
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .stomach-caption strong {
+      color: var(--coffee);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>☕ 카페인 기록</h1>
+
+    <nav class="tabs" role="tablist">
+      <button type="button" class="active" data-tab="record" role="tab" aria-selected="true">기록</button>
+      <button type="button" data-tab="view" role="tab" aria-selected="false">보기</button>
+    </nav>
+
+    <!-- 기록 -->
+    <section id="panel-record" class="panel active" role="tabpanel">
+      <div class="card coffee">
+        <h2>커피</h2>
+        <label for="coffee-cups">잔 수</label>
+        <input id="coffee-cups" type="number" min="0.25" step="0.25" value="1" />
+
+        <label for="coffee-time">마신 시각</label>
+        <input id="coffee-time" type="datetime-local" />
+
+        <label for="coffee-reason">왜 마셨는지</label>
+        <textarea id="coffee-reason" placeholder="예: 오후 집중이 필요해서"></textarea>
+
+        <button type="button" class="btn btn-save-coffee" id="save-coffee">커피 기록 저장</button>
+      </div>
+
+      <div class="card other">
+        <h2>커피 외 음료</h2>
+        <label for="other-cups">잔 수</label>
+        <input id="other-cups" type="number" min="0.25" step="0.25" value="1" />
+
+        <label for="other-time">마신 시각</label>
+        <input id="other-time" type="datetime-local" />
+
+        <button type="button" class="btn btn-save-other" id="save-other">음료 기록 저장</button>
+      </div>
+    </section>
+
+    <!-- 보기 -->
+    <section id="panel-view" class="panel" role="tabpanel">
+      <div class="stat-box">
+        <div class="value" id="week-caffeine-mg">0</div>
+        <div class="unit">이번 주 카페인 총량 (mg)</div>
+        <div class="hint">기준: 아메리카노 1잔 ≈ 95mg (일반적인 한 잔 기준)</div>
+      </div>
+
+      <div class="stomach-viz">
+        <h2>이번 주, 위 속 커피</h2>
+        <div class="stomach-svg-wrap">
+          <svg
+            class="stomach-svg"
+            viewBox="0 0 200 248"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <defs>
+              <!-- 전면 위: 상단 식도 → 우만(왼쪽 위 볼록) → 큰굽이(긴 하단 연) → 유문부(오른아래) → 작은굽이 -->
+              <path
+                id="stomach-silhouette"
+                d="M 97 3.5
+                   L 103 3.5
+                   L 105 21.5
+                   C 152 25 188 56 194 102
+                   C 200 152 176 204 132 232
+                   C 104 248 66 246 38 222
+                   C 8 198 4 150 8 102
+                   C 18 54 52 24 95 21.5
+                   L 97 3.5
+                   Z"
+              />
+              <clipPath id="stomach-clip">
+                <use href="#stomach-silhouette" />
+              </clipPath>
+              <linearGradient id="coffee-pool" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#6b4a2e" stop-opacity="0" />
+                <stop offset="35%" stop-color="#5c3d28" stop-opacity="0.35" />
+                <stop offset="100%" stop-color="#2d1f12" stop-opacity="1" />
+              </linearGradient>
+              <radialGradient id="coffee-blot-a" cx="40%" cy="38%" r="55%">
+                <stop offset="0%" stop-color="#7a5235" stop-opacity="0.55" />
+                <stop offset="70%" stop-color="#4a3020" stop-opacity="0" />
+              </radialGradient>
+              <radialGradient id="coffee-blot-b" cx="62%" cy="52%" r="45%">
+                <stop offset="0%" stop-color="#6d4830" stop-opacity="0.5" />
+                <stop offset="100%" stop-color="#3d2818" stop-opacity="0" />
+              </radialGradient>
+              <radialGradient id="coffee-blot-c" cx="48%" cy="72%" r="50%">
+                <stop offset="0%" stop-color="#554026" stop-opacity="0.6" />
+                <stop offset="100%" stop-color="#2a1a10" stop-opacity="0" />
+              </radialGradient>
+            </defs>
+
+            <g clip-path="url(#stomach-clip)">
+              <rect x="0" y="0" width="200" height="248" fill="#e84d64" />
+              <rect x="0" y="0" width="200" height="248" fill="#ffb3c1" opacity="0.35" />
+              <g id="stomach-stain-group" opacity="0">
+                <rect x="0" y="0" width="200" height="248" fill="url(#coffee-pool)" />
+                <rect x="0" y="0" width="200" height="248" fill="url(#coffee-blot-a)" />
+                <rect x="0" y="0" width="200" height="248" fill="url(#coffee-blot-b)" />
+                <rect x="0" y="0" width="200" height="248" fill="url(#coffee-blot-c)" />
+              </g>
+            </g>
+            <use
+              href="#stomach-silhouette"
+              fill="none"
+              stroke="rgba(255,255,255,0.18)"
+              stroke-width="1.75"
+              vector-effect="non-scaling-stroke"
+            />
+          </svg>
+        </div>
+        <p class="stomach-caption">
+          이번 주 커피 <strong id="stomach-week-cups">0</strong>잔.
+          <span id="stomach-msg">선홍빛 위는 아직 커피 얼룩이 거의 없어요.</span>
+        </p>
+      </div>
+
+      <div class="view-toolbar">
+        <button type="button" class="active" data-range="week">주간</button>
+        <button type="button" data-range="month">월간</button>
+      </div>
+
+      <div class="card">
+        <h2 style="margin-bottom:4px;color:var(--text);">잔 수 추이</h2>
+        <p style="margin:0 0 12px;font-size:0.82rem;color:var(--muted);">커피(막대) · 기타 음료(선)</p>
+        <div class="chart-wrap">
+          <canvas id="chart-main"></canvas>
+        </div>
+        <p id="chart-empty" class="empty-msg" style="display:none;">아직 기록이 없습니다. 기록 탭에서 입력해 보세요.</p>
+      </div>
+
+      <div class="log-list">
+        <h3>최근 기록</h3>
+        <div id="recent-logs"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = "caffeine-tracker-v1";
+      /** US FDA 등에서 자주 인용되는 일반 커피 1잔(약 237ml) 기준 카페인 약 95mg */
+      const CAFFEINE_MG_PER_AMERICANO = 95;
+
+      function loadEntries() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return [];
+          const parsed = JSON.parse(raw);
+          return Array.isArray(parsed) ? parsed : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function saveEntries(entries) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+      }
+
+      function nowLocalDatetimeValue() {
+        const d = new Date();
+        const pad = (n) => String(n).padStart(2, "0");
+        const y = d.getFullYear();
+        const m = pad(d.getMonth() + 1);
+        const day = pad(d.getDate());
+        const h = pad(d.getHours());
+        const min = pad(d.getMinutes());
+        return `${y}-${m}-${day}T${h}:${min}`;
+      }
+
+      function parseLocalInput(value) {
+        if (!value) return new Date();
+        const d = new Date(value);
+        return isNaN(d.getTime()) ? new Date() : d;
+      }
+
+      function startOfWeek(d) {
+        const x = new Date(d);
+        const day = x.getDay();
+        const diff = x.getDate() - day + (day === 0 ? -6 : 1);
+        x.setDate(diff);
+        x.setHours(0, 0, 0, 0);
+        return x;
+      }
+
+      function startOfMonth(d) {
+        const x = new Date(d);
+        x.setDate(1);
+        x.setHours(0, 0, 0, 0);
+        return x;
+      }
+
+      function addDays(d, n) {
+        const x = new Date(d);
+        x.setDate(x.getDate() + n);
+        return x;
+      }
+
+      function formatDayLabel(d) {
+        const w = ["일", "월", "화", "수", "목", "금", "토"];
+        return `${d.getMonth() + 1}/${d.getDate()}(${w[d.getDay()]})`;
+      }
+
+      function formatMonthDay(d) {
+        return `${d.getMonth() + 1}/${d.getDate()}`;
+      }
+
+      let chartInstance = null;
+      let viewRange = "week";
+
+      function getWeekCoffeeCupsAndCaffeine() {
+        const entries = loadEntries();
+        const weekStart = startOfWeek(new Date());
+        const weekEnd = addDays(weekStart, 7);
+        let coffeeCups = 0;
+        for (const e of entries) {
+          if (e.type !== "coffee") continue;
+          const t = new Date(e.time);
+          if (t >= weekStart && t < weekEnd) {
+            coffeeCups += Number(e.cups) || 0;
+          }
+        }
+        const mg = Math.round(coffeeCups * CAFFEINE_MG_PER_AMERICANO);
+        return { coffeeCups, mg };
+      }
+
+      function buildBuckets(range) {
+        const entries = loadEntries();
+        const now = new Date();
+        let labels = [];
+        let coffeeByBucket = [];
+        let otherByBucket = [];
+        let bucketStarts = [];
+
+        if (range === "week") {
+          const ws = startOfWeek(now);
+          for (let i = 0; i < 7; i++) {
+            const dayStart = addDays(ws, i);
+            const dayEnd = addDays(dayStart, 1);
+            bucketStarts.push(dayStart);
+            labels.push(formatDayLabel(dayStart));
+            let c = 0,
+              o = 0;
+            for (const e of entries) {
+              const t = new Date(e.time);
+              if (t >= dayStart && t < dayEnd) {
+                if (e.type === "coffee") c += Number(e.cups) || 0;
+                else if (e.type === "other") o += Number(e.cups) || 0;
+              }
+            }
+            coffeeByBucket.push(c);
+            otherByBucket.push(o);
+          }
+        } else {
+          const ms = startOfMonth(now);
+          const next = new Date(ms);
+          next.setMonth(next.getMonth() + 1);
+          const daysInMonth = Math.round((next - ms) / 86400000);
+          for (let i = 0; i < daysInMonth; i++) {
+            const dayStart = addDays(ms, i);
+            const dayEnd = addDays(dayStart, 1);
+            bucketStarts.push(dayStart);
+            labels.push(formatMonthDay(dayStart));
+            let c = 0,
+              o = 0;
+            for (const e of entries) {
+              const t = new Date(e.time);
+              if (t >= dayStart && t < dayEnd) {
+                if (e.type === "coffee") c += Number(e.cups) || 0;
+                else if (e.type === "other") o += Number(e.cups) || 0;
+              }
+            }
+            coffeeByBucket.push(c);
+            otherByBucket.push(o);
+          }
+        }
+
+        return { labels, coffeeByBucket, otherByBucket, bucketStarts };
+      }
+
+      function renderChart() {
+        const canvas = document.getElementById("chart-main");
+        const emptyEl = document.getElementById("chart-empty");
+        const { labels, coffeeByBucket, otherByBucket } = buildBuckets(viewRange);
+
+        const hasData =
+          coffeeByBucket.some((v) => v > 0) || otherByBucket.some((v) => v > 0);
+        emptyEl.style.display = hasData ? "none" : "block";
+        canvas.style.display = hasData ? "block" : "none";
+
+        if (chartInstance) {
+          chartInstance.destroy();
+          chartInstance = null;
+        }
+
+        if (!hasData) return;
+
+        chartInstance = new Chart(canvas, {
+          type: "bar",
+          data: {
+            labels,
+            datasets: [
+              {
+                type: "bar",
+                label: "커피 (잔)",
+                data: coffeeByBucket,
+                backgroundColor: "rgba(196, 149, 106, 0.75)",
+                borderColor: "rgba(196, 149, 106, 1)",
+                borderWidth: 1,
+                yAxisID: "y",
+                order: 2,
+              },
+              {
+                type: "line",
+                label: "기타 음료 (잔)",
+                data: otherByBucket,
+                borderColor: "rgba(125, 211, 192, 1)",
+                backgroundColor: "rgba(125, 211, 192, 0.2)",
+                tension: 0.25,
+                fill: false,
+                yAxisID: "y",
+                order: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: "index", intersect: false },
+            plugins: {
+              legend: {
+                labels: { color: "#8b9aad", font: { size: 11 } },
+              },
+            },
+            scales: {
+              x: {
+                ticks: { color: "#8b9aad", maxRotation: viewRange === "month" ? 45 : 0 },
+                grid: { color: "rgba(45, 58, 77, 0.5)" },
+              },
+              y: {
+                beginAtZero: true,
+                ticks: { color: "#8b9aad" },
+                grid: { color: "rgba(45, 58, 77, 0.5)" },
+              },
+            },
+          },
+        });
+      }
+
+      function renderRecentLogs() {
+        const container = document.getElementById("recent-logs");
+        const entries = loadEntries().sort(
+          (a, b) => new Date(b.time) - new Date(a.time)
+        );
+        const slice = entries.slice(0, 15);
+        if (slice.length === 0) {
+          container.innerHTML =
+            '<p class="empty-msg" style="padding:16px;">저장된 기록이 없습니다.</p>';
+          return;
+        }
+
+        container.innerHTML = slice
+          .map((e) => {
+            const t = new Date(e.time);
+            const dateStr = t.toLocaleString("ko-KR", {
+              dateStyle: "medium",
+              timeStyle: "short",
+            });
+            if (e.type === "coffee") {
+              const reason = (e.reason || "").trim();
+              return `
+            <div class="log-item coffee" data-id="${e.id}">
+              <strong>커피 ${e.cups}잔</strong> · ${dateStr}
+              ${reason ? `<div class="reason">${escapeHtml(reason)}</div>` : ""}
+              <button type="button" class="delete" data-id="${e.id}">삭제</button>
+            </div>`;
+            }
+            return `
+            <div class="log-item other" data-id="${e.id}">
+              <strong>기타 음료 ${e.cups}잔</strong> · ${dateStr}
+              <button type="button" class="delete" data-id="${e.id}">삭제</button>
+            </div>`;
+          })
+          .join("");
+      }
+
+      function escapeHtml(s) {
+        const div = document.createElement("div");
+        div.textContent = s;
+        return div.innerHTML;
+      }
+
+      /** 이 잔 수에 가까울수록 위 시각화가 커피색으로 가득 찬 느낌 (동기 부여용 스케일) */
+      const STAIN_FULL_WEEK_CUPS = 14;
+
+      function formatCupsDisplay(n) {
+        if (n === 0) return "0";
+        const rounded = Math.round(n * 4) / 4;
+        return Number.isInteger(rounded)
+          ? String(rounded)
+          : String(rounded);
+      }
+
+      function updateStomachVisual() {
+        const { coffeeCups } = getWeekCoffeeCupsAndCaffeine();
+        const group = document.getElementById("stomach-stain-group");
+        const cupsEl = document.getElementById("stomach-week-cups");
+        const msgEl = document.getElementById("stomach-msg");
+
+        cupsEl.textContent = formatCupsDisplay(coffeeCups);
+
+        const t = Math.min(1, coffeeCups / STAIN_FULL_WEEK_CUPS);
+        const stain = t * t * (3 - 2 * t);
+        const opacity = stain * 0.97;
+        group.setAttribute("opacity", opacity.toFixed(3));
+        group.style.transition = "opacity 0.65s ease";
+
+        let msg = "";
+        if (coffeeCups <= 0) {
+          msg = "선홍빛 위는 아직 커피 얼룩이 거의 없어요.";
+        } else if (stain < 0.22) {
+          msg = "살짝 커피 빛이 스며들기 시작해요.";
+        } else if (stain < 0.5) {
+          msg = "위가 커피색으로 점점 물들어가고 있어요.";
+        } else if (stain < 0.82) {
+          msg = "위가 꽤 진한 커피 톤으로 보여요. 잠시 쉬었다 마셔도 좋아요.";
+        } else {
+          msg = "이번 주는 위가 커피 얼룩으로 가득한 느낌이에요. 물 한 잔은 어떨까요?";
+        }
+        msgEl.textContent = msg;
+      }
+
+      function updateWeekStat() {
+        const { mg } = getWeekCoffeeCupsAndCaffeine();
+        document.getElementById("week-caffeine-mg").textContent =
+          mg.toLocaleString("ko-KR");
+        updateStomachVisual();
+      }
+
+      function refreshView() {
+        updateWeekStat();
+        renderChart();
+        renderRecentLogs();
+      }
+
+      // Tabs
+      document.querySelectorAll(".tabs [data-tab]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const tab = btn.dataset.tab;
+          document.querySelectorAll(".tabs [data-tab]").forEach((b) => {
+            b.classList.toggle("active", b.dataset.tab === tab);
+            b.setAttribute("aria-selected", b.dataset.tab === tab);
+          });
+          document.querySelectorAll(".panel").forEach((p) => {
+            p.classList.toggle("active", p.id === "panel-" + tab);
+          });
+          if (tab === "view") refreshView();
+        });
+      });
+
+      // Range
+      document.querySelectorAll(".view-toolbar [data-range]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          viewRange = btn.dataset.range;
+          document.querySelectorAll(".view-toolbar [data-range]").forEach((b) => {
+            b.classList.toggle("active", b.dataset.range === viewRange);
+          });
+          renderChart();
+        });
+      });
+
+      // Save coffee
+      document.getElementById("save-coffee").addEventListener("click", () => {
+        const cups = parseFloat(document.getElementById("coffee-cups").value);
+        const timeVal = document.getElementById("coffee-time").value;
+        const reason = document.getElementById("coffee-reason").value.trim();
+        if (!cups || cups <= 0) {
+          alert("커피 잔 수를 입력해 주세요.");
+          return;
+        }
+        const entries = loadEntries();
+        entries.push({
+          id: crypto.randomUUID(),
+          type: "coffee",
+          cups,
+          time: parseLocalInput(timeVal).toISOString(),
+          reason: reason || "",
+        });
+        saveEntries(entries);
+        document.getElementById("coffee-reason").value = "";
+        alert("커피 기록을 저장했습니다.");
+      });
+
+      // Save other
+      document.getElementById("save-other").addEventListener("click", () => {
+        const cups = parseFloat(document.getElementById("other-cups").value);
+        const timeVal = document.getElementById("other-time").value;
+        if (!cups || cups <= 0) {
+          alert("음료 잔 수를 입력해 주세요.");
+          return;
+        }
+        const entries = loadEntries();
+        entries.push({
+          id: crypto.randomUUID(),
+          type: "other",
+          cups,
+          time: parseLocalInput(timeVal).toISOString(),
+        });
+        saveEntries(entries);
+        alert("음료 기록을 저장했습니다.");
+      });
+
+      // Delete
+      document.getElementById("recent-logs").addEventListener("click", (ev) => {
+        const target = ev.target;
+        if (!target.classList.contains("delete")) return;
+        const id = target.dataset.id;
+        if (!id || !confirm("이 기록을 삭제할까요?")) return;
+        const next = loadEntries().filter((e) => e.id !== id);
+        saveEntries(next);
+        refreshView();
+      });
+
+      // Init datetime defaults
+      document.getElementById("coffee-time").value = nowLocalDatetimeValue();
+      document.getElementById("other-time").value = nowLocalDatetimeValue();
+    })();
+  </script>
+</body>
+</html>
