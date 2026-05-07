@@ -377,62 +377,79 @@
         <div class="stomach-svg-wrap">
           <svg
             class="stomach-svg"
-            viewBox="0 0 200 248"
+            viewBox="0 0 200 260"
             xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
           >
             <defs>
-              <!-- 전면 위: 상단 식도 → 우만(왼쪽 위 볼록) → 큰굽이(긴 하단 연) → 유문부(오른아래) → 작은굽이 -->
+              <!-- 3D 아이콘 참고: 식도(좌상) → 우만·위체가 오른쪽으로 크게 볼록 → 큰굽이(우·하) → 유문 훅(좌하) → 작은굽이(좌연) -->
               <path
                 id="stomach-silhouette"
-                d="M 97 3.5
-                   L 103 3.5
-                   L 105 21.5
-                   C 152 25 188 56 194 102
-                   C 200 152 176 204 132 232
-                   C 104 248 66 246 38 222
-                   C 8 198 4 150 8 102
-                   C 18 54 52 24 95 21.5
-                   L 97 3.5
+                d="M 64 9
+                   L 74 6.5
+                   L 78 36
+                   C 128 24 182 44 192 88
+                   C 204 132 198 186 166 218
+                   C 138 242 96 258 54 248
+                   C 26 240 6 210 6 172
+                   C 6 128 28 88 56 60
+                   C 60 52 62 42 62 34
+                   L 62 34
+                   L 64 9
                    Z"
               />
               <clipPath id="stomach-clip">
                 <use href="#stomach-silhouette" />
               </clipPath>
-              <linearGradient id="coffee-pool" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#6b4a2e" stop-opacity="0" />
-                <stop offset="35%" stop-color="#5c3d28" stop-opacity="0.35" />
-                <stop offset="100%" stop-color="#2d1f12" stop-opacity="1" />
+              <!-- 조명 우상단: 하이라이트 · 좌하·안쪽 J 곡선 음영 -->
+              <radialGradient id="stomach-3d-main" cx="72%" cy="22%" r="78%" fx="68%" fy="18%">
+                <stop offset="0%" stop-color="#ffb5b5" />
+                <stop offset="38%" stop-color="#ff6b6b" />
+                <stop offset="72%" stop-color="#e85555" />
+                <stop offset="100%" stop-color="#9a3838" />
+              </radialGradient>
+              <linearGradient id="stomach-3d-shadow" x1="8%" y1="92%" x2="88%" y2="12%">
+                <stop offset="0%" stop-color="#6a2929" stop-opacity="0.45" />
+                <stop offset="42%" stop-color="#ff6b6b" stop-opacity="0" />
               </linearGradient>
-              <radialGradient id="coffee-blot-a" cx="40%" cy="38%" r="55%">
-                <stop offset="0%" stop-color="#7a5235" stop-opacity="0.55" />
-                <stop offset="70%" stop-color="#4a3020" stop-opacity="0" />
+              <linearGradient id="stomach-inner-hook" x1="18%" y1="55%" x2="52%" y2="48%">
+                <stop offset="0%" stop-color="#5c2024" stop-opacity="0.28" />
+                <stop offset="55%" stop-color="#ff6b6b" stop-opacity="0" />
+              </linearGradient>
+              <!-- 탁한 갈색(7일 20잔에서 완전 표시): 채도 낮은 커피·진흙 톤 -->
+              <radialGradient id="stomach-brown-3d-main" cx="72%" cy="22%" r="78%" fx="68%" fy="18%">
+                <stop offset="0%" stop-color="#9a8f84" />
+                <stop offset="38%" stop-color="#6e5c4d" />
+                <stop offset="72%" stop-color="#4a3d34" />
+                <stop offset="100%" stop-color="#2e2420" />
               </radialGradient>
-              <radialGradient id="coffee-blot-b" cx="62%" cy="52%" r="45%">
-                <stop offset="0%" stop-color="#6d4830" stop-opacity="0.5" />
-                <stop offset="100%" stop-color="#3d2818" stop-opacity="0" />
-              </radialGradient>
-              <radialGradient id="coffee-blot-c" cx="48%" cy="72%" r="50%">
-                <stop offset="0%" stop-color="#554026" stop-opacity="0.6" />
-                <stop offset="100%" stop-color="#2a1a10" stop-opacity="0" />
-              </radialGradient>
+              <linearGradient id="stomach-brown-3d-shadow" x1="8%" y1="92%" x2="88%" y2="12%">
+                <stop offset="0%" stop-color="#1a100c" stop-opacity="0.5" />
+                <stop offset="42%" stop-color="#4a3d34" stop-opacity="0" />
+              </linearGradient>
+              <linearGradient id="stomach-brown-inner-hook" x1="18%" y1="55%" x2="52%" y2="48%">
+                <stop offset="0%" stop-color="#1a1410" stop-opacity="0.32" />
+                <stop offset="55%" stop-color="#6e5c4d" stop-opacity="0" />
+              </linearGradient>
             </defs>
 
             <g clip-path="url(#stomach-clip)">
-              <rect x="0" y="0" width="200" height="248" fill="#e84d64" />
-              <rect x="0" y="0" width="200" height="248" fill="#ffb3c1" opacity="0.35" />
-              <g id="stomach-stain-group" opacity="0">
-                <rect x="0" y="0" width="200" height="248" fill="url(#coffee-pool)" />
-                <rect x="0" y="0" width="200" height="248" fill="url(#coffee-blot-a)" />
-                <rect x="0" y="0" width="200" height="248" fill="url(#coffee-blot-b)" />
-                <rect x="0" y="0" width="200" height="248" fill="url(#coffee-blot-c)" />
+              <g id="stomach-healthy-layer">
+                <rect x="0" y="0" width="200" height="260" fill="url(#stomach-3d-main)" />
+                <rect x="0" y="0" width="200" height="260" fill="url(#stomach-3d-shadow)" />
+                <rect x="0" y="0" width="200" height="260" fill="url(#stomach-inner-hook)" />
+              </g>
+              <g id="stomach-brown-layer" opacity="0">
+                <rect x="0" y="0" width="200" height="260" fill="url(#stomach-brown-3d-main)" />
+                <rect x="0" y="0" width="200" height="260" fill="url(#stomach-brown-3d-shadow)" />
+                <rect x="0" y="0" width="200" height="260" fill="url(#stomach-brown-inner-hook)" />
               </g>
             </g>
             <use
               href="#stomach-silhouette"
               fill="none"
-              stroke="rgba(255,255,255,0.18)"
-              stroke-width="1.75"
+              stroke="rgba(255,255,255,0.22)"
+              stroke-width="1.5"
               vector-effect="non-scaling-stroke"
             />
           </svg>
@@ -718,8 +735,8 @@
         return div.innerHTML;
       }
 
-      /** 이 잔 수에 가까울수록 위 시각화가 커피색으로 가득 찬 느낌 (동기 부여용 스케일) */
-      const STAIN_FULL_WEEK_CUPS = 14;
+      /** 이번 주(7일) 커피 잔 수: 20잔 이상이면 위가 완전히 탁한 갈색으로 보이도록 선형 매핑 */
+      const WEEK_FULL_BROWN_CUPS = 20;
 
       function formatCupsDisplay(n) {
         if (n === 0) return "0";
@@ -731,29 +748,34 @@
 
       function updateStomachVisual() {
         const { coffeeCups } = getWeekCoffeeCupsAndCaffeine();
-        const group = document.getElementById("stomach-stain-group");
+        const healthy = document.getElementById("stomach-healthy-layer");
+        const brown = document.getElementById("stomach-brown-layer");
         const cupsEl = document.getElementById("stomach-week-cups");
         const msgEl = document.getElementById("stomach-msg");
 
         cupsEl.textContent = formatCupsDisplay(coffeeCups);
 
-        const t = Math.min(1, coffeeCups / STAIN_FULL_WEEK_CUPS);
-        const stain = t * t * (3 - 2 * t);
-        const opacity = stain * 0.97;
-        group.setAttribute("opacity", opacity.toFixed(3));
-        group.style.transition = "opacity 0.65s ease";
+        const t = Math.min(1, coffeeCups / WEEK_FULL_BROWN_CUPS);
+        const oHealthy = 1 - t;
+        const oBrown = t;
+        healthy.setAttribute("opacity", oHealthy.toFixed(4));
+        brown.setAttribute("opacity", oBrown.toFixed(4));
+        healthy.style.transition = "opacity 0.45s ease";
+        brown.style.transition = "opacity 0.45s ease";
 
         let msg = "";
         if (coffeeCups <= 0) {
-          msg = "선홍빛 위는 아직 커피 얼룩이 거의 없어요.";
-        } else if (stain < 0.22) {
-          msg = "살짝 커피 빛이 스며들기 시작해요.";
-        } else if (stain < 0.5) {
-          msg = "위가 커피색으로 점점 물들어가고 있어요.";
-        } else if (stain < 0.82) {
-          msg = "위가 꽤 진한 커피 톤으로 보여요. 잠시 쉬었다 마셔도 좋아요.";
+          msg = "선홍빛 위는 아직 갈색으로 거의 물들지 않았어요.";
+        } else if (t < 0.2) {
+          msg = "잔 수가 늘 때마다 탁한 갈색이 조금씩 스며들어요.";
+        } else if (t < 0.45) {
+          msg = "이번 주 누적만큼 위가 누런 갈색으로 바뀌고 있어요.";
+        } else if (t < 0.75) {
+          msg = "위 색이 꽤 탁한 갈색이에요. 한동안 줄여 보는 것도 좋아요.";
+        } else if (t < 1) {
+          msg = "거의 온통 탁한 갈색에 가깝습니다. 20잔 넘기 전에 호흡을 맞춰 봐요.";
         } else {
-          msg = "이번 주는 위가 커피 얼룩으로 가득한 느낌이에요. 물 한 잔은 어떨까요?";
+          msg = "이번 주 기준으로 위가 완전히 탁한 갈색으로 보여요. 물과 휴식도 챙겨요.";
         }
         msgEl.textContent = msg;
       }
