@@ -121,13 +121,14 @@
     .card.other .card-head h2 { color: var(--other); }
 
     .drink-icon {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       flex-shrink: 0;
     }
 
-    .card.coffee .drink-icon { color: var(--coffee); }
-    .card.other .drink-icon { color: var(--other); }
+    .drink-icon--loom {
+      overflow: visible;
+    }
 
     .app-title {
       display: flex;
@@ -136,9 +137,8 @@
     }
 
     .app-title .drink-icon {
-      width: 30px;
-      height: 30px;
-      color: var(--coffee);
+      width: 32px;
+      height: 32px;
     }
 
     .log-item-head {
@@ -154,8 +154,6 @@
       flex-shrink: 0;
     }
 
-    .log-item.coffee .log-item-head .drink-icon { color: var(--coffee); }
-    .log-item.other .log-item-head .drink-icon { color: var(--other); }
 
     .log-item-body {
       flex: 1;
@@ -180,8 +178,6 @@
       height: 18px;
     }
 
-    .chart-legend-icons .coffee-legend { color: var(--coffee); }
-    .chart-legend-icons .other-legend { color: var(--other); }
 
     label {
       display: block;
@@ -254,8 +250,8 @@
 
     .btn-save-coffee .drink-icon,
     .btn-save-other .drink-icon {
-      color: inherit;
-      opacity: 0.92;
+      opacity: 0.95;
+      filter: brightness(0.72) contrast(1.15);
     }
 
     .view-toolbar {
@@ -417,70 +413,63 @@
 </head>
 <body>
   <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
-    <symbol id="icon-coffee" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M6 9.5V17a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-7.5"
-        stroke="currentColor"
-        stroke-width="1.75"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M5 9.5h14a2.5 2.5 0 0 0 0-5H9a2.5 2.5 0 0 0 0 5z"
-        stroke="currentColor"
-        stroke-width="1.75"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M19 10h1.2a2.3 2.3 0 0 1 0 4.6H19"
-        stroke="currentColor"
-        stroke-width="1.75"
-        stroke-linecap="round"
-      />
-      <path
-        d="M8 3.2c0 1.2-.7 2.2-1.6 2.2M12 2.5c0 1.5-.8 2.8-1.8 2.8M16 3.2c0 1.2-.7 2.2-1.6 2.2"
-        stroke="currentColor"
-        stroke-width="1.5"
-        stroke-linecap="round"
-      />
-      <path
-        d="M7 20h10"
-        stroke="currentColor"
-        stroke-width="1.75"
-        stroke-linecap="round"
-        opacity="0.55"
-      />
+    <!-- 첨부 이미지 무드: 가는 선 겹침 · 파스텔 · 대칭 · 기계식 문양(guilloché) -->
+    <symbol id="icon-coffee" viewBox="0 0 32 32" fill="none">
+      <g stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 6.5 Q13.2 3.2 16 1.2 Q18.8 3.2 16 6.5" stroke="#c992a8" stroke-width="0.38" opacity="0.9" />
+        <path d="M16 7.8 Q12.5 4.5 16 2.2 Q19.5 4.5 16 7.8" stroke="#a88bb8" stroke-width="0.36" opacity="0.75" />
+        <path d="M16 9 Q11.8 5.8 16 3.2 Q20.2 5.8 16 9" stroke="#d4a0b8" stroke-width="0.34" opacity="0.65" />
+        <path d="M14.2 5.5 Q16 8.2 17.8 5.5" stroke="#b87898" stroke-width="0.32" opacity="0.55" />
+        <path d="M12.8 4.2 Q16 7.5 19.2 4.2" stroke="#9a7aa8" stroke-width="0.3" opacity="0.5" />
+        <ellipse cx="16" cy="25.2" rx="8.2" ry="2.1" stroke="#b87888" stroke-width="0.42" />
+        <ellipse cx="16" cy="23.6" rx="7.6" ry="1.95" stroke="#c9929e" stroke-width="0.4" opacity="0.92" />
+        <ellipse cx="16" cy="22" rx="7" ry="1.75" stroke="#d4a0b8" stroke-width="0.38" opacity="0.82" />
+        <ellipse cx="16" cy="20.4" rx="6.3" ry="1.55" stroke="#a88bb8" stroke-width="0.36" opacity="0.72" />
+        <ellipse cx="16" cy="18.8" rx="5.6" ry="1.35" stroke="#c48a9a" stroke-width="0.35" opacity="0.65" />
+        <ellipse cx="16" cy="17.2" rx="4.9" ry="1.15" stroke="#9a7aa8" stroke-width="0.34" opacity="0.58" />
+        <path d="M8.8 13.5 C8.2 20.5 9.5 25.8 16 26.6 C22.5 25.8 23.8 20.5 23.2 13.5" stroke="#b08098" stroke-width="0.44" />
+        <path d="M10 14.2 C9.6 19.8 10.6 24.2 16 25 C21.4 24.2 22.4 19.8 22 14.2" stroke="#c992a8" stroke-width="0.36" opacity="0.7" />
+        <path d="M11.2 15 Q16 16.8 20.8 15" stroke="#a88bb8" stroke-width="0.34" opacity="0.68" />
+        <path d="M10.5 17.5 Q16 19.8 21.5 17.5" stroke="#d4a0b8" stroke-width="0.33" opacity="0.62" />
+        <path d="M10 20 Q16 22.5 22 20" stroke="#9a7aa8" stroke-width="0.32" opacity="0.58" />
+        <path d="M12 16.5 Q16 14.5 20 16.5" stroke="#c48a9a" stroke-width="0.32" opacity="0.52" />
+        <path d="M11.5 19 Q16 17 20.5 19" stroke="#b87898" stroke-width="0.3" opacity="0.48" />
+        <path d="M13 18 Q16 20.5 19 18" stroke="#c9929e" stroke-width="0.3" opacity="0.45" />
+        <path d="M9.5 16 Q16 12.5 22.5 16" stroke="#8a6a88" stroke-width="0.28" opacity="0.4" />
+        <path d="M9.8 21.5 Q16 24.5 22.2 21.5" stroke="#a88bb8" stroke-width="0.28" opacity="0.38" />
+      </g>
     </symbol>
-    <symbol id="icon-drink-other" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M9 4h6l1.2 14.5a2.5 2.5 0 0 1-2.5 2.7H10.3a2.5 2.5 0 0 1-2.5-2.7L9 4z"
-        stroke="currentColor"
-        stroke-width="1.75"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M8.5 9h7"
-        stroke="currentColor"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        opacity="0.7"
-      />
-      <path
-        d="M14 3.5l3.5 5.5"
-        stroke="currentColor"
-        stroke-width="1.75"
-        stroke-linecap="round"
-      />
-      <circle cx="11" cy="14" r="1.1" fill="currentColor" opacity="0.85" />
-      <circle cx="14.5" cy="16" r="0.85" fill="currentColor" opacity="0.6" />
-      <circle cx="9.5" cy="16.5" r="0.7" fill="currentColor" opacity="0.5" />
+    <symbol id="icon-drink-other" viewBox="0 0 32 32" fill="none">
+      <g stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11.5 5.5 L20.5 5.5 L22.2 24.5 Q22.4 27.2 16 27.6 Q9.6 27.2 9.8 24.5 Z" stroke="#7a9e88" stroke-width="0.44" />
+        <path d="M12.2 7 L19.8 7 L21.2 23.8 Q21.3 26 16 26.4 Q10.7 26 11.2 23.8 Z" stroke="#8eb89a" stroke-width="0.38" opacity="0.82" />
+        <path d="M13 8.5 L19 8.5 L20.2 22.5 Q20.3 24.2 16 24.5 Q11.7 24.2 12.2 22.5 Z" stroke="#a8c9b0" stroke-width="0.35" opacity="0.68" />
+        <ellipse cx="16" cy="26.8" rx="5.8" ry="1.4" stroke="#6d8f78" stroke-width="0.4" opacity="0.75" />
+        <ellipse cx="16" cy="25.5" rx="5.2" ry="1.2" stroke="#8eb89a" stroke-width="0.36" opacity="0.6" />
+        <path d="M10.5 12 Q16 14.5 21.5 12" stroke="#a8c9b0" stroke-width="0.34" opacity="0.7" />
+        <path d="M11 15 Q16 17.8 21 15" stroke="#7a9e88" stroke-width="0.33" opacity="0.62" />
+        <path d="M11.5 18 Q16 21 20.5 18" stroke="#d4b8a0" stroke-width="0.32" opacity="0.58" />
+        <path d="M12 21 Q16 23.5 20 21" stroke="#8eb89a" stroke-width="0.31" opacity="0.52" />
+        <path d="M13.5 11 Q16 8.5 18.5 11" stroke="#d4b8a0" stroke-width="0.3" opacity="0.5" />
+        <path d="M12.8 14.5 Q16 12 19.2 14.5" stroke="#c9a890" stroke-width="0.3" opacity="0.45" />
+        <path d="M13.2 17.5 Q16 15.2 18.8 17.5" stroke="#a8c9b0" stroke-width="0.29" opacity="0.42" />
+        <path d="M14 20 Q16 18 18 20" stroke="#7a9e88" stroke-width="0.28" opacity="0.4" />
+        <path d="M15 13.5 Q16 16 17 13.5" stroke="#6d8f78" stroke-width="0.28" opacity="0.38" />
+        <path d="M14.5 16.5 Q16 19 17.5 16.5" stroke="#d4b8a0" stroke-width="0.27" opacity="0.36" />
+        <path d="M21 4.5 L25.5 11.5" stroke="#c9a890" stroke-width="0.38" opacity="0.85" />
+        <path d="M22 5.5 L26 11" stroke="#a8c9b0" stroke-width="0.32" opacity="0.6" />
+        <path d="M20.5 6 L24.5 10.5" stroke="#8eb89a" stroke-width="0.28" opacity="0.45" />
+        <path d="M14 10 Q11 13 14 16" stroke="#d4b8a0" stroke-width="0.3" opacity="0.5" />
+        <path d="M18 10 Q21 13 18 16" stroke="#a8c9b0" stroke-width="0.3" opacity="0.48" />
+        <ellipse cx="14.5" cy="19.5" rx="1.1" ry="0.85" stroke="#c9a890" stroke-width="0.28" opacity="0.55" />
+        <ellipse cx="17.5" cy="21" rx="0.9" ry="0.7" stroke="#8eb89a" stroke-width="0.26" opacity="0.45" />
+      </g>
     </symbol>
   </svg>
 
   <div class="app">
     <h1 class="app-title">
-      <svg class="drink-icon" aria-hidden="true"><use href="#icon-coffee" /></svg>
+      <svg class="drink-icon drink-icon--loom" aria-hidden="true"><use href="#icon-coffee" /></svg>
       카페인 기록
     </h1>
 
@@ -493,7 +482,7 @@
     <section id="panel-record" class="panel active" role="tabpanel">
       <div class="card coffee">
         <div class="card-head">
-          <svg class="drink-icon" aria-hidden="true"><use href="#icon-coffee" /></svg>
+          <svg class="drink-icon drink-icon--loom" aria-hidden="true"><use href="#icon-coffee" /></svg>
           <h2>커피</h2>
         </div>
         <label for="coffee-cups">잔 수</label>
@@ -506,14 +495,14 @@
         <textarea id="coffee-reason" placeholder="예: 오후 집중이 필요해서"></textarea>
 
         <button type="button" class="btn btn-save-coffee btn-with-icon" id="save-coffee">
-          <svg class="drink-icon" aria-hidden="true"><use href="#icon-coffee" /></svg>
+          <svg class="drink-icon drink-icon--loom" aria-hidden="true"><use href="#icon-coffee" /></svg>
           커피 기록 저장
         </button>
       </div>
 
       <div class="card other">
         <div class="card-head">
-          <svg class="drink-icon" aria-hidden="true"><use href="#icon-drink-other" /></svg>
+          <svg class="drink-icon drink-icon--loom" aria-hidden="true"><use href="#icon-drink-other" /></svg>
           <h2>커피 외 음료</h2>
         </div>
         <label for="other-cups">잔 수</label>
@@ -523,7 +512,7 @@
         <input id="other-time" type="datetime-local" />
 
         <button type="button" class="btn btn-save-other btn-with-icon" id="save-other">
-          <svg class="drink-icon" aria-hidden="true"><use href="#icon-drink-other" /></svg>
+          <svg class="drink-icon drink-icon--loom" aria-hidden="true"><use href="#icon-drink-other" /></svg>
           음료 기록 저장
         </button>
       </div>
@@ -634,11 +623,11 @@
         <h2 style="margin-bottom:4px;color:var(--text);">잔 수 추이</h2>
         <p class="chart-legend-icons" style="margin:0 0 12px;font-size:0.82rem;color:var(--muted);">
           <span class="coffee-legend">
-            <svg class="drink-icon" aria-hidden="true"><use href="#icon-coffee" /></svg>
+            <svg class="drink-icon drink-icon--loom" aria-hidden="true"><use href="#icon-coffee" /></svg>
             커피(막대)
           </span>
           <span class="other-legend">
-            <svg class="drink-icon" aria-hidden="true"><use href="#icon-drink-other" /></svg>
+            <svg class="drink-icon drink-icon--loom" aria-hidden="true"><use href="#icon-drink-other" /></svg>
             기타 음료(선)
           </span>
         </p>
@@ -920,9 +909,9 @@
       }
 
       const ICON_COFFEE =
-        '<svg class="drink-icon" aria-hidden="true"><use href="#icon-coffee"/></svg>';
+        '<svg class="drink-icon drink-icon--loom" aria-hidden="true"><use href="#icon-coffee"/></svg>';
       const ICON_OTHER =
-        '<svg class="drink-icon" aria-hidden="true"><use href="#icon-drink-other"/></svg>';
+        '<svg class="drink-icon drink-icon--loom" aria-hidden="true"><use href="#icon-drink-other"/></svg>';
 
       /** 이번 주(7일) 커피 잔 수: 20잔 이상이면 위가 완전히 탁한 갈색으로 보이도록 선형 매핑 */
       const WEEK_FULL_BROWN_CUPS = 20;
