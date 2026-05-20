@@ -103,15 +103,85 @@
       margin-bottom: 14px;
     }
 
-    .card h2 {
-      font-size: 0.95rem;
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       margin: 0 0 14px;
+    }
+
+    .card-head h2 {
+      font-size: 0.95rem;
+      margin: 0;
       color: var(--muted);
       font-weight: 600;
     }
 
-    .card.coffee h2 { color: var(--coffee); }
-    .card.other h2 { color: var(--other); }
+    .card.coffee .card-head h2 { color: var(--coffee); }
+    .card.other .card-head h2 { color: var(--other); }
+
+    .drink-icon {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+
+    .card.coffee .drink-icon { color: var(--coffee); }
+    .card.other .drink-icon { color: var(--other); }
+
+    .app-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .app-title .drink-icon {
+      width: 30px;
+      height: 30px;
+      color: var(--coffee);
+    }
+
+    .log-item-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .log-item-head .drink-icon {
+      width: 22px;
+      height: 22px;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+
+    .log-item.coffee .log-item-head .drink-icon { color: var(--coffee); }
+    .log-item.other .log-item-head .drink-icon { color: var(--other); }
+
+    .log-item-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .chart-legend-icons {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .chart-legend-icons span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chart-legend-icons .drink-icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    .chart-legend-icons .coffee-legend { color: var(--coffee); }
+    .chart-legend-icons .other-legend { color: var(--other); }
 
     label {
       display: block;
@@ -168,6 +238,24 @@
     .btn-save-other {
       background: var(--other);
       color: #0a1614;
+    }
+
+    .btn-with-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-with-icon .drink-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .btn-save-coffee .drink-icon,
+    .btn-save-other .drink-icon {
+      color: inherit;
+      opacity: 0.92;
     }
 
     .view-toolbar {
@@ -328,8 +416,73 @@
   </style>
 </head>
 <body>
+  <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+    <symbol id="icon-coffee" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M6 9.5V17a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-7.5"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M5 9.5h14a2.5 2.5 0 0 0 0-5H9a2.5 2.5 0 0 0 0 5z"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M19 10h1.2a2.3 2.3 0 0 1 0 4.6H19"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+      />
+      <path
+        d="M8 3.2c0 1.2-.7 2.2-1.6 2.2M12 2.5c0 1.5-.8 2.8-1.8 2.8M16 3.2c0 1.2-.7 2.2-1.6 2.2"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+      />
+      <path
+        d="M7 20h10"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+        opacity="0.55"
+      />
+    </symbol>
+    <symbol id="icon-drink-other" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M9 4h6l1.2 14.5a2.5 2.5 0 0 1-2.5 2.7H10.3a2.5 2.5 0 0 1-2.5-2.7L9 4z"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M8.5 9h7"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        opacity="0.7"
+      />
+      <path
+        d="M14 3.5l3.5 5.5"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+      />
+      <circle cx="11" cy="14" r="1.1" fill="currentColor" opacity="0.85" />
+      <circle cx="14.5" cy="16" r="0.85" fill="currentColor" opacity="0.6" />
+      <circle cx="9.5" cy="16.5" r="0.7" fill="currentColor" opacity="0.5" />
+    </symbol>
+  </svg>
+
   <div class="app">
-    <h1>☕ 카페인 기록</h1>
+    <h1 class="app-title">
+      <svg class="drink-icon" aria-hidden="true"><use href="#icon-coffee" /></svg>
+      카페인 기록
+    </h1>
 
     <nav class="tabs" role="tablist">
       <button type="button" class="active" data-tab="record" role="tab" aria-selected="true">기록</button>
@@ -339,7 +492,10 @@
     <!-- 기록 -->
     <section id="panel-record" class="panel active" role="tabpanel">
       <div class="card coffee">
-        <h2>커피</h2>
+        <div class="card-head">
+          <svg class="drink-icon" aria-hidden="true"><use href="#icon-coffee" /></svg>
+          <h2>커피</h2>
+        </div>
         <label for="coffee-cups">잔 수</label>
         <input id="coffee-cups" type="number" min="0.25" step="0.25" value="1" />
 
@@ -349,18 +505,27 @@
         <label for="coffee-reason">왜 마셨는지</label>
         <textarea id="coffee-reason" placeholder="예: 오후 집중이 필요해서"></textarea>
 
-        <button type="button" class="btn btn-save-coffee" id="save-coffee">커피 기록 저장</button>
+        <button type="button" class="btn btn-save-coffee btn-with-icon" id="save-coffee">
+          <svg class="drink-icon" aria-hidden="true"><use href="#icon-coffee" /></svg>
+          커피 기록 저장
+        </button>
       </div>
 
       <div class="card other">
-        <h2>커피 외 음료</h2>
+        <div class="card-head">
+          <svg class="drink-icon" aria-hidden="true"><use href="#icon-drink-other" /></svg>
+          <h2>커피 외 음료</h2>
+        </div>
         <label for="other-cups">잔 수</label>
         <input id="other-cups" type="number" min="0.25" step="0.25" value="1" />
 
         <label for="other-time">마신 시각</label>
         <input id="other-time" type="datetime-local" />
 
-        <button type="button" class="btn btn-save-other" id="save-other">음료 기록 저장</button>
+        <button type="button" class="btn btn-save-other btn-with-icon" id="save-other">
+          <svg class="drink-icon" aria-hidden="true"><use href="#icon-drink-other" /></svg>
+          음료 기록 저장
+        </button>
       </div>
     </section>
 
@@ -467,7 +632,16 @@
 
       <div class="card">
         <h2 style="margin-bottom:4px;color:var(--text);">잔 수 추이</h2>
-        <p style="margin:0 0 12px;font-size:0.82rem;color:var(--muted);">커피(막대) · 기타 음료(선)</p>
+        <p class="chart-legend-icons" style="margin:0 0 12px;font-size:0.82rem;color:var(--muted);">
+          <span class="coffee-legend">
+            <svg class="drink-icon" aria-hidden="true"><use href="#icon-coffee" /></svg>
+            커피(막대)
+          </span>
+          <span class="other-legend">
+            <svg class="drink-icon" aria-hidden="true"><use href="#icon-drink-other" /></svg>
+            기타 음료(선)
+          </span>
+        </p>
         <div class="chart-wrap">
           <canvas id="chart-main"></canvas>
         </div>
@@ -715,15 +889,25 @@
               const reason = (e.reason || "").trim();
               return `
             <div class="log-item coffee" data-id="${e.id}">
-              <strong>커피 ${e.cups}잔</strong> · ${dateStr}
-              ${reason ? `<div class="reason">${escapeHtml(reason)}</div>` : ""}
-              <button type="button" class="delete" data-id="${e.id}">삭제</button>
+              <div class="log-item-head">
+                ${ICON_COFFEE}
+                <div class="log-item-body">
+                  <strong>커피 ${e.cups}잔</strong> · ${dateStr}
+                  ${reason ? `<div class="reason">${escapeHtml(reason)}</div>` : ""}
+                  <button type="button" class="delete" data-id="${e.id}">삭제</button>
+                </div>
+              </div>
             </div>`;
             }
             return `
             <div class="log-item other" data-id="${e.id}">
-              <strong>기타 음료 ${e.cups}잔</strong> · ${dateStr}
-              <button type="button" class="delete" data-id="${e.id}">삭제</button>
+              <div class="log-item-head">
+                ${ICON_OTHER}
+                <div class="log-item-body">
+                  <strong>기타 음료 ${e.cups}잔</strong> · ${dateStr}
+                  <button type="button" class="delete" data-id="${e.id}">삭제</button>
+                </div>
+              </div>
             </div>`;
           })
           .join("");
@@ -734,6 +918,11 @@
         div.textContent = s;
         return div.innerHTML;
       }
+
+      const ICON_COFFEE =
+        '<svg class="drink-icon" aria-hidden="true"><use href="#icon-coffee"/></svg>';
+      const ICON_OTHER =
+        '<svg class="drink-icon" aria-hidden="true"><use href="#icon-drink-other"/></svg>';
 
       /** 이번 주(7일) 커피 잔 수: 20잔 이상이면 위가 완전히 탁한 갈색으로 보이도록 선형 매핑 */
       const WEEK_FULL_BROWN_CUPS = 20;
